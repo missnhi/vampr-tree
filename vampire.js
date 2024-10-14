@@ -72,6 +72,50 @@ class Vampire {
     
     return null; // In case there is no common ancestor, which shouldn't happen in a valid tree
   }
+  
+  
+  // Returns the vampire object with that name, or null if no vampire exists with that name
+  vampireWithName(name) {
+    // console.log(`Checking vampire: "${this.name}" vs "${name}"`); // Debug
+    
+    if (this.name === name) {
+      return this;
+    }
+    //traverse downward
+    for (const child of this.offspring) {
+      const result = child.vampireWithName(name);
+      if (result) {
+        return result;
+      }
+    }
+    
+    return null;
+  }
+  
+  // Returns the total number of vampires that exist
+  get totalDescendents() {
+    let num = 0;
+    let currentVamp = this;
+    
+    for (const child of currentVamp.offspring) {
+      num += 1 + child.totalDescendents;
+    }
+    
+    return num;
+  }
+  
+  // Returns an array of all the vampires that were converted after 1980
+  get allMillennialVampires() {
+    let vampires = [];
+    if (this.yearConverted > 1980) {
+      vampires.push(this);
+      
+    }
+    for (const child of this.offspring) {
+      vampires = vampires.concat(child.allMillennialVampires);
+    }
+    return vampires;
+  }
 }
 
 
